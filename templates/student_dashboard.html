@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Student Dashboard</h2>
+<a class="btn-link" href="{{ url_for('apply_leave') }}">Apply for Leave</a>
+
+<h3>Your Leave Applications</h3>
+<table class="data-table">
+    <tr>
+        <th>ID</th>
+        <th>Reason</th>
+        <th>From</th>
+        <th>To</th>
+        <th>Status</th>
+    </tr>
+    {% for leave in leaves %}
+    <tr>
+        <td>{{ leave.id }}</td>
+        <td>{{ leave.reason }}</td>
+        <td>{{ leave.start_date }}</td>
+        <td>{{ leave.end_date }}</td>
+        <td>{{ leave.status }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">No leave applications yet.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

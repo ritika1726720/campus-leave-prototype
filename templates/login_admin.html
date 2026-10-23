@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Admin Login</h2>
+<form method="post" class="form-card">
+    <label>Admin Username</label>
+    <input type="text" name="username" required>
+
+    <label>Password</label>
+    <input type="password" name="password" minlength="6" maxlength="12" required>
+
+    <button type="submit">Login</button>
+    <p class="form-note">
+        Default admin: <b>admin / admin123</b>
+    </p>
+</form>
+{% endblock %}

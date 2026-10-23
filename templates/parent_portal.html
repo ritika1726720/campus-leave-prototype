@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Parent Module</h2>
+<p>Parents can register using their child's student ID and approve or reject leave requests.</p>
+
+<div class="card-grid">
+    <a href="{{ url_for('login_parent') }}" class="card-link">Parent Login</a>
+    <a href="{{ url_for('register_parent') }}" class="card-link">Parent Register</a>
+</div>
+{% endblock %}

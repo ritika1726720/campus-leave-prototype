@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Parent Login</h2>
+<form method="post" class="form-card">
+    <label>Student ID </label>
+    <input type="number" name="student_id" required>
+
+    <label>Password</label>
+    <input type="password" name="password" minlength="6" maxlength="12" required>
+
+
+    <button type="submit">Login</button>
+    <p class="form-note">
+        New parent? <a href="{{ url_for('register_parent') }}">Register here</a>.
+    </p>
+</form>
+{% endblock %}

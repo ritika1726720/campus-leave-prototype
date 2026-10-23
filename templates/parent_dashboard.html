@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Parent Dashboard</h2>
+
+<p class="note">
+    Notifications: <strong>{{ pending_count }}</strong> leave request(s) waiting for your approval.
+</p>
+
+<h3>Your Child's Leave Applications</h3>
+<table class="data-table">
+    <tr>
+        <th>ID</th>
+        <th>Reason</th>
+        <th>From</th>
+        <th>To</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+    {% for leave in leaves %}
+    <tr>
+        <td>{{ leave.id }}</td>
+        <td>{{ leave.reason }}</td>
+        <td>{{ leave.start_date }}</td>
+        <td>{{ leave.end_date }}</td>
+        <td>{{ leave.status }}</td>
+        <td>
+            {# Only show buttons while it is waiting for the parent #}
+            {% if leave.status == 'Pending Parent Approval' %}
+                <form class="inline-form" method="post" action="{{ url_for('parent_approve', leave_id=leave.id) }}">
+                    <button type="submit" name="action" value="approve">Approve</button>
+                    <button type="submit" name="action" value="reject">Reject</button>
+                </form>
+            {% else %}
+                --
+            {% endif %}
+        </td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="6">No leave applications.</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

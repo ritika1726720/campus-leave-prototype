@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>College Leave Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="{% block body_class %}{% endblock %}">
+<header class="site-header">
+    <div class="logo-title">
+        <!-- logo directly from internet -->
+        <img src="https://upload.wikimedia.org/wikipedia/en/9/90/Pantnagar_logo.jpg"
+             alt="College Logo" class="logo">
+        <div>
+            <h1>GOVIND BALLABH PANT UNIVERSITY OF AGRICULTURE & TECHNOLOGY </h1>
+            <p>Online Leave Application Portal</p>
+        </div>
+    </div>
+    <nav class="main-nav">
+    <a href="{{ url_for('index') }}">Home</a>
+    <a href="{{ url_for('student_portal') }}">Student</a>
+    <a href="{{ url_for('parent_portal') }}">Parent</a>
+    <a href="{{ url_for('advisor_portal') }}">Advisor</a>
+    <a href="{{ url_for('warden_portal') }}">Warden</a>
+    <a href="{{ url_for('admin_portal') }}">Admin</a>
+
+    {% if 'user_id' in session %}
+        <span class="welcome">Hi, {{ session.get('username', '') }}</span>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    {% endif %}
+</nav>
+</header>
+
+<main class="content">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class="flash-messages">
+            {% for m in messages %}
+                <li>{{ m }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+    <p>&copy; GB Pant University of Agriculture and Technology. All rights reserved.</p>
+</footer>
+</body>
+</html>

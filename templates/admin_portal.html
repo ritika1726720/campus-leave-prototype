@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Admin Module</h2>
+<p>Admin can view all users and all leave requests.</p>
+
+<div class="card-grid">
+    <a href="{{ url_for('login_admin') }}" class="card-link">Admin Login</a>
+</div>
+{% endblock %}

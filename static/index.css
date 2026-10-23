@@ -1,0 +1,41 @@
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #f5f7fa;
+  color: #333;
+}
+
+.hero {
+  background: linear-gradient(135deg, #003366, #0066cc);
+  color: white;
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.hero h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  font-size: 1.2rem;
+}
+
+.links {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.links a {
+  display: inline-block;
+  margin: 10px;
+  padding: 12px 20px;
+  background: #0055cc;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+.links a:hover {
+  background: #0044aa;
+}

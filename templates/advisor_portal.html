@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Advisor Module</h2>
+<p>Advisors review leave requests that are already approved by parents.</p>
+
+<div class="card-grid">
+    <a href="{{ url_for('login_advisor') }}" class="card-link">Advisor Login</a>
+    <a href="{{ url_for('register_advisor') }}" class="card-link">Advisor Register</a>
+</div>
+{% endblock %}

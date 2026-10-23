@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Apply for Leave</h2>
+<form method="post" class="form-card">
+    <label>Reason</label>
+    <textarea name="reason" rows="3" required></textarea>
+
+    <label>Start Date</label>
+    <input type="date" name="start_date" required>
+
+    <label>End Date</label>
+    <input type="date" name="end_date" required>
+
+    <button type="submit">Submit Application</button>
+</form>
+{% endblock %}

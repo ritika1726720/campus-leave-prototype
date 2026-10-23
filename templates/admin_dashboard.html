@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Admin Dashboard</h2>
+
+<h3>All Users</h3>
+<table class="data-table">
+    <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Role</th>
+        <th>Student ID (if any)</th>
+    </tr>
+    {% for u in users %}
+    <tr>
+        <td>{{ u.id }}</td>
+        <td>{{ u.username }}</td>
+        <td>{{ u.role }}</td>
+        <td>{{ u.student_id if u.student_id else '-' }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4">No users found.</td></tr>
+    {% endfor %}
+</table>
+
+<h3>All Leave Applications</h3>
+<table class="data-table">
+    <tr>
+        <th>ID</th>
+        <th>Student ID</th>
+        <th>Reason</th>
+        <th>From</th>
+        <th>To</th>
+        <th>Status</th>
+        <th>Parent</th>
+        <th>Advisor</th>
+        <th>Warden</th>
+    </tr>
+    {% for leave in leaves %}
+    <tr>
+        <td>{{ leave.id }}</td>
+        <td>{{ leave.student_id }}</td>
+        <td>{{ leave.reason }}</td>
+        <td>{{ leave.start_date }}</td>
+        <td>{{ leave.end_date }}</td>
+        <td>{{ leave.status }}</td>
+        <td>{{ 'Yes' if leave.parent_approved else 'No' }}</td>
+        <td>{{ 'Yes' if leave.advisor_approved else 'No' }}</td>
+        <td>{{ 'Yes' if leave.warden_approved else 'No' }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="9">No leave applications found.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Warden Module</h2>
+<p>Wardens give final approval to leave requests that are approved by parents and advisors.</p>
+
+<div class="card-grid">
+    <a href="{{ url_for('login_warden') }}" class="card-link">Warden Login</a>
+    <a href="{{ url_for('register_warden') }}" class="card-link">Warden Register</a>
+</div>
+{% endblock %}

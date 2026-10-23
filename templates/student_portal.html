@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Student Module</h2>
+<p>Students can register and then login to apply for leave and check status.</p>
+
+<div class="card-grid">
+    <a href="{{ url_for('login_student') }}" class="card-link">Student Login</a>
+    <a href="{{ url_for('register_student') }}" class="card-link">Student Register</a>
+</div>
+{% endblock %}

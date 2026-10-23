@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Advisor Login</h2>
+<form method="post" class="form-card">
+    <label>Advisor Username</label>
+    <input type="text" name="username" required>
+
+    <label>Password</label>
+    <input type="password" name="password" minlength="6" maxlength="12" required>
+
+    <button type="submit">Login</button>
+</form>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Student Login</h2>
+<form method="post" class="form-card">
+    <label>Student ID</label>
+    <input type="number" name="student_id" required>
+
+    <label>Password</label>
+    <input type="password" name="password" minlength="6" maxlength="12" required>
+
+    <button type="submit">Login</button>
+    <p class="form-note">
+        New student? <a href="{{ url_for('register_student') }}">Register here</a>.
+    </p>
+</form>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Advisor Registration</h2>
+<form method="post" class="form-card">
+    <label>Advisor Username</label>
+    <input type="text" name="username" required>
+
+    <label>Create Password</label>
+    <input type="password" name="password" minlength="6" maxlength="12" required>
+
+
+    <button type="submit">Register</button>
+    <p class="form-note">
+        Already registered? <a href="{{ url_for('login_advisor') }}">Login here</a>.
+    </p>
+</form>
+{% endblock %}
