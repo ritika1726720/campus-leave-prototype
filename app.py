@@ -5,9 +5,14 @@ from datetime import timedelta
 from functools import wraps
 
 app = Flask(__name__)
-app.secret_key = "change_this_to_a_random_secret_key"
-app.permanent_session_lifetime = timedelta(days=7)  # parent stays logged in
+import os
 
+app.secret_key = os.environ.get("FLASK_SECRET_KEY")
+if not app.secret_key:
+    raise RuntimeError(
+        "FLASK_SECRET_KEY is not set. Configure it before starting the app."
+    )
+app.permanent_session_lifetime = timedelta(days=7)  # parent stays logged in
 
 # =================== DATABASE HELPERS ===================
 
@@ -48,16 +53,6 @@ def init_db():
         )
     """)
 
-    # Default admin
-    cur.execute("SELECT * FROM users WHERE role='admin'")
-    admin = cur.fetchone()
-    if not admin:
-        cur.execute(
-            "INSERT INTO users (username, password, role, student_id) VALUES (?, ?, 'admin', NULL)",
-            ("admin", generate_password_hash("admin123"))
-        )
-        print("Default admin created: username=admin, password=admin123")
-
     conn.commit()
     conn.close()
 
@@ -65,7 +60,6 @@ def init_db():
 # Initialize DB once when app starts (Flask 3 safe)
 with app.app_context():
     init_db()
-
 
 # =================== LOGIN PROTECTOR ===================
 
@@ -84,11 +78,10 @@ def login_required(role=None):
 
 
 # =================== HOME + MODULE PAGES ===================
-
 @app.route("/")
 def index():
+    print("HOMEPAGE ROUTE REACHED")
     return render_template("index.html")
-
 
 @app.route("/student")
 def student_portal():
@@ -113,7 +106,6 @@ def warden_portal():
 @app.route("/admin-portal")
 def admin_portal():
     return render_template("admin_portal.html")
-
 
 # =================== STUDENT AUTH & DASHBOARD ===================
 
@@ -155,7 +147,6 @@ def register_student():
         return redirect(url_for("login_student"))
 
     return render_template("register_student.html")
-
 
 @app.route("/login/student", methods=["GET", "POST"])
 def login_student():
@@ -201,7 +192,6 @@ def student_dashboard():
     conn.close()
     return render_template("student_dashboard.html", leaves=leaves)
 
-
 @app.route("/apply_leave", methods=["GET", "POST"])
 @login_required(role="student")
 def apply_leave():
@@ -232,7 +222,6 @@ def apply_leave():
 
     return render_template("apply_leave.html")
 
-
 # =================== PARENT AUTH & DASHBOARD ===================
 
 @app.route("/register/parent", methods=["GET", "POST"])
@@ -248,7 +237,7 @@ def register_parent():
             flash("Password cannot be empty.")
             return redirect(url_for("register_parent"))
 
-        # ✅ Password length restriction
+        #  Password length restriction
         if len(password) < 6 or len(password) > 12:
             flash("Password must be 6–12 characters long.")
             return redirect(url_for("register_parent"))
@@ -275,7 +264,6 @@ def register_parent():
         return redirect(url_for("login_parent"))
 
     return render_template("register_parent.html")
-
 
 @app.route("/login/parent", methods=["GET", "POST"])
 def login_parent():
@@ -306,7 +294,6 @@ def login_parent():
 
     return render_template("login_parent.html")
 
-
 @app.route("/dashboard/parent")
 @login_required(role="parent")
 def parent_dashboard():
@@ -333,7 +320,6 @@ def parent_dashboard():
     conn.close()
 
     return render_template("parent_dashboard.html", leaves=leaves, pending_count=pending_count)
-
 
 @app.route("/parent/approve/<int:leave_id>", methods=["POST"])
 @login_required(role="parent")
@@ -377,7 +363,6 @@ def parent_approve(leave_id):
     conn.close()
     return redirect(url_for("parent_dashboard"))
 
-
 # =================== ADVISOR AUTH & DASHBOARD ===================
 
 @app.route("/register/advisor", methods=["GET", "POST"])
@@ -390,7 +375,7 @@ def register_advisor():
             flash("All fields are required.")
             return redirect(url_for("register_advisor"))
 
-        # ✅ Password length restriction
+        #  Password length restriction
         if len(password) < 6 or len(password) > 12:
             flash("Password must be 6–12 characters long.")
             return redirect(url_for("register_advisor"))
@@ -417,7 +402,6 @@ def register_advisor():
 
     return render_template("register_advisor.html")
 
-
 @app.route("/login/advisor", methods=["GET", "POST"])
 def login_advisor():
     if request.method == "POST":
@@ -441,7 +425,6 @@ def login_advisor():
         return redirect(url_for("login_advisor"))
 
     return render_template("login_advisor.html")
-
 
 @app.route("/dashboard/advisor")
 @login_required(role="advisor")
@@ -483,7 +466,7 @@ def advisor_approve(leave_id):
 
     conn = get_db_connection()
     cur = conn.cursor()
-
+    
     # Only pending-for-advisor leaves should be processed
     cur.execute("""
         SELECT * FROM leave_requests
@@ -519,7 +502,6 @@ def advisor_approve(leave_id):
     conn.close()
     return redirect(url_for("advisor_dashboard"))
 
-
 # =================== WARDEN AUTH & DASHBOARD ===================
 
 @app.route("/register/warden", methods=["GET", "POST"])
@@ -532,7 +514,7 @@ def register_warden():
             flash("All fields are required.")
             return redirect(url_for("register_warden"))
 
-        # ✅ Password length restriction
+        #  Password length restriction
         if len(password) < 6 or len(password) > 12:
             flash("Password must be 6–12 characters long.")
             return redirect(url_for("register_warden"))
@@ -559,7 +541,6 @@ def register_warden():
 
     return render_template("register_warden.html")
 
-
 @app.route("/login/warden", methods=["GET", "POST"])
 def login_warden():
     if request.method == "POST":
@@ -583,7 +564,6 @@ def login_warden():
         return redirect(url_for("login_warden"))
 
     return render_template("login_warden.html")
-
 
 @app.route("/dashboard/warden")
 @login_required(role="warden")
@@ -617,8 +597,6 @@ def warden_dashboard():
         pending_leaves=pending_leaves,
         processed_leaves=processed_leaves
     )
-
-
 @app.route("/warden/approve/<int:leave_id>", methods=["POST"])
 @login_required(role="warden")
 def warden_approve(leave_id):
@@ -663,9 +641,6 @@ def warden_approve(leave_id):
     conn.close()
     return redirect(url_for("warden_dashboard"))
 
-
-# =================== ADMIN AUTH & DASHBOARD ===================
-
 @app.route("/login/admin", methods=["GET", "POST"])
 def login_admin():
     if request.method == "POST":
@@ -674,7 +649,10 @@ def login_admin():
 
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute("SELECT * FROM users WHERE role='admin' AND username=?", (username,))
+        cur.execute(
+            "SELECT * FROM users WHERE role='admin' AND username=?",
+            (username,)
+        )
         admin = cur.fetchone()
         conn.close()
 
@@ -690,14 +668,17 @@ def login_admin():
 
     return render_template("login_admin.html")
 
-
 @app.route("/dashboard/admin")
 @login_required(role="admin")
 def admin_dashboard():
     conn = get_db_connection()
     cur = conn.cursor()
 
-    cur.execute("SELECT * FROM users ORDER BY role, username")
+    cur.execute("""
+        SELECT id, username, role, student_id
+        FROM users
+        ORDER BY role, username
+    """)
     users = cur.fetchall()
 
     cur.execute("SELECT * FROM leave_requests ORDER BY created_at DESC")
@@ -720,4 +701,4 @@ def logout():
 # =================== RUN APP ===================
 
 if __name__ == "__main__":
-    app.run(debug =True)
+    app.run(debug=False)
